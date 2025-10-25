@@ -1,0 +1,110 @@
+import MenuItemCard from "../Components/MenuItemCard";
+import MargheritaPizza from "../Images/Margherita-pizza.jpg";
+import Alfredo from "../Images/fettuccine-alfredo.jpg";
+import Tiramisu from "../Images/tiramisu.jpg";
+import Soup from "../Images/soup.jpg";
+import Salad from "../Images/salad.jpg";
+import Arancini from "../Images/arancini.webp";
+import BresaolaPizza from "../Images/BresaolaPizza.webp";
+import Lasagna from "../Images/lasagna.jpg";
+import PainPerdue from "../Images/PainPerdue-1.jpg";
+
+const DUMMY_MENU = {
+  Starters: [
+    {
+      id: 1,
+      name: "Soup",
+      description: "Italian vegetable soup",
+      price: 3.49,
+      image: Soup,
+    },
+    {
+      id: 2,
+      name: "Salad",
+      description: "Fresh garden salad mixed with goat cheese",
+      price: 5.49,
+      image: Salad,
+    },
+    {
+      id: 3,
+      name: "Arancini",
+      description: "Risotto balls filled with cheese",
+      price: 4.99,
+      image: Arancini,
+    },
+  ],
+  Pizzas: [
+    {
+      id: 4,
+      name: "Margherita Pizza",
+      description: "Classic with mozzarella & basil",
+      price: 8.99,
+      image: MargheritaPizza,
+    },
+    {
+      id: 5,
+      name: "Bresaola Pizza",
+      description: "Air-dried, salted beef with arugula",
+      price: 7.99,
+      image: BresaolaPizza,
+    },
+  ],
+  Pastas: [
+    {
+      id: 6,
+      name: "Lasagna",
+      description: "Layers of pasta with meat sauce & béchamel",
+      price: 6.49,
+      image: Lasagna,
+    },
+    {
+      id: 7,
+      name: "Pasta Alfredo",
+      description: "Creamy sauce & parmesan",
+      price: 10.99,
+      image: Alfredo,
+    },
+  ],
+  Desserts: [
+    {
+      id: 8,
+      name: "Tiramisu",
+      description: "Italian coffee dessert",
+      price: 6.49,
+      image: Tiramisu,
+    },
+    {
+      id: 9,
+      name: "Pain Perdue",
+      description: "French toast with caramelized sugar",
+      price: 7.49,
+      image: PainPerdue,
+    },
+  ],
+};
+
+const Menu = ({ addToCart }) => (
+  <section className="px-6 py-8 bg-[#0F1E13] min-h-screen">
+    <h2 className="text-3xl font-bold text-center text-[#D4AF37] mb-8">
+      Our Menu
+    </h2>
+
+    {/* Object.keys(DUMMY_MENU) returns an array of the menu categories */}
+    {Object.keys(DUMMY_MENU).map((category) => (
+      <div key={category} className="mb-12">
+        <h3 className="text-2xl font-semibold text-[#D4AF37] underline mb-2 py-5">
+          {category}
+        </h3>
+
+        {/* Display all items inside this category using .map for looping and key for sorting by key value*/}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {DUMMY_MENU[category].map((item) => (
+            <MenuItemCard key={item.id} item={item} onAddToCart={addToCart} />
+          ))}
+        </div>
+      </div>
+    ))}
+  </section>
+);
+
+export default Menu;
