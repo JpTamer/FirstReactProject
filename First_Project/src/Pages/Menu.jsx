@@ -8,7 +8,10 @@ import Arancini from "../Images/arancini.webp";
 import BresaolaPizza from "../Images/BresaolaPizza.webp";
 import Lasagna from "../Images/lasagna.jpg";
 import PainPerdue from "../Images/PainPerdue-1.jpg";
-
+import Truffle from "../Images/Truffle.jpg";
+import Pesto from "../Images/Pesto.jpg";
+import Quatro from "../Images/Quatro.webp";
+import Bruschetta from "../Images/Bruschetta.webp";
 const DUMMY_MENU = {
   Starters: [
     {
@@ -32,49 +35,75 @@ const DUMMY_MENU = {
       price: 4.99,
       image: Arancini,
     },
+    {
+      id : 4,
+      name: "Bruschetta",
+      description: "Grilled bread with tomato & basil",
+      price: 2.49,
+      image: Bruschetta,
+    },
   ],
   Pizzas: [
     {
-      id: 4,
+      id: 5,
       name: "Margherita Pizza",
       description: "Classic with mozzarella & basil",
       price: 8.99,
       image: MargheritaPizza,
     },
     {
-      id: 5,
+      id: 6,
       name: "Bresaola Pizza",
       description: "Air-dried, salted beef with arugula",
       price: 7.99,
       image: BresaolaPizza,
     },
+    {id: 7,
+      name: "Quatro Formaggi Pizza",
+      description: "Mozzarella, gorgonzola, parmesan, ricotta",
+      price: 9.49,
+      image: Quatro,
+    }
   ],
   Pastas: [
     {
-      id: 6,
+      id: 8,
       name: "Lasagna",
       description: "Layers of pasta with meat sauce & béchamel",
       price: 6.49,
       image: Lasagna,
     },
     {
-      id: 7,
+      id: 9,
       name: "Pasta Alfredo",
       description: "Creamy sauce & parmesan",
       price: 10.99,
       image: Alfredo,
     },
+    {id: 10,
+      name: "Truffle Pasta",
+      description: "Black truffle with creamy sauce",
+      price: 12.49,
+      image: Truffle,
+    },
+    {
+      id: 11,
+      name: "Pesto Pasta",
+      description: "Basil pesto with pine nuts",
+      price: 9.49,
+      image: Pesto,
+    },
   ],
   Desserts: [
     {
-      id: 8,
+      id: 12,
       name: "Tiramisu",
       description: "Italian coffee dessert",
       price: 6.49,
       image: Tiramisu,
     },
     {
-      id: 9,
+      id: 13,
       name: "Pain Perdue",
       description: "French toast with caramelized sugar",
       price: 7.49,
