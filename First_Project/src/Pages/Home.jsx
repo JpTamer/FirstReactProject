@@ -51,7 +51,7 @@ return (
         to="/menu"
         className="bg-[#D4AF37] text-[#0F1E13] px-6 py-3 rounded-xl text-lg font-semibold hover:bg-yellow-500"
       >
-        View Menu →
+        Explore Menu →
       </Link>
     </div>
   </>
