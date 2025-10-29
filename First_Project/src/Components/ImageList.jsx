@@ -1,6 +1,3 @@
-import ImageList from "@mui/material/ImageList";
-import ImageListItem from "@mui/material/ImageListItem";
-import ImageListItemBar from "@mui/material/ImageListItemBar";
 import Tiramisu from "../Images/tiramisu.jpg";
 import MargheritaPizza from "../Images/Margherita-pizza.jpg";
 import Arancini from "../Images/arancini.webp";
@@ -8,53 +5,30 @@ import Lasagna from "../Images/lasagna.jpg";
 import Salad from "../Images/salad.jpg";
 import Soup from "../Images/soup.jpg";
 
-//I took this ready function from MUI documentation to make responsive images
-function srcset(image, width, height, rows = 1, cols = 1) {
-  return {
-    src: `${image}?w=${width * cols}&h=${height * rows}&fit=crop&auto=format`,
-    srcSet: `${image}?w=${width * cols}&h=${
-      height * rows
-    }&fit=crop&auto=format&dpr=2 2x`,
-  };
-}
-
 export default function CustomImageList() {
   return (
-    <div className="flex justify-center items-center w-full mt-8 px-4">
-      <div className="w-full max-w-6xl">
-        <ImageList
-          className="w-full"
-          cols={3}
-          gap={8}
-          sx={{
-            transform: "translateZ(0)",
-          }}
-        >
-          {itemData.map((item) => {
-            const cols = item.featured ? 2 : 1;
-            const rows = item.featured ? 2 : 1;
-
-            return (
-              <ImageListItem key={item.img} cols={cols} rows={rows}>
-                <img
-                  {...srcset(item.img, 250, 200, rows, cols)}
-                  alt={item.title}
-                  loading="lazy"
-                  className="w-full h-full object-cover rounded-lg shadow-md transition-transform duration-300 hover:scale-105"
-                />
-                <ImageListItemBar
-                  sx={{
-                    background:
-                      "linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, " +
-                      "rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)",
-                  }}
-                  title={item.title}
-                  position="top"
-                />
-              </ImageListItem>
-            );
-          })}
-        </ImageList>
+    <div className="flex justify-center items-center w-full py-12 px-6 bg-[#1E3B2F]">
+      <div className="w-full max-w-7xl">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {itemData.map((item, index) => (
+            <div
+              key={index}
+              className="relative overflow-hidden rounded-xl shadow-lg group transition-all duration-300 hover:shadow-[0_8px_30px_#D4AF37]/40"
+            >
+              <img
+                src={item.img}
+                alt={item.title}
+                loading="lazy"//we used lazy loading for better performance so images load only when they are in viewport
+                className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/10 to-transparent"></div>
+              <div className="absolute bottom-4 left-4 text-[#F5F5F5]">
+                <h3 className="text-xl font-semibold tracking-wide">{item.title}</h3>
+                <p className="text-sm text-gray-300">{item.subtitle}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -63,27 +37,33 @@ export default function CustomImageList() {
 const itemData = [
   {
     img: Tiramisu,
-    title: "Dessert",
+    title: "Dolci Selection",
+    subtitle: "Indulge in our sweet creations",
     featured: true,
   },
   {
     img: MargheritaPizza,
-    title: "Pizza",
+    title: "Artisan Pizzas",
+    subtitle: "Classic Italian flavors crafted to perfection",
   },
   {
     img: Arancini,
-    title: "Appetizer",
+    title: "Antipasti",
+    subtitle: "A variety of starters to awaken your appetite",
   },
   {
     img: Lasagna,
-    title: "Pasta",
+    title: "Handmade Pasta",
+    subtitle: "Traditional recipes with a modern twist",
   },
   {
     img: Salad,
-    title: "Salad",
+    title: "Fresh Salads",
+    subtitle: "Crisp, seasonal ingredients for a light bite",
   },
   {
     img: Soup,
-    title: "Soup",
+    title: "Chef’s Soups",
+    subtitle: "Warm and comforting, crafted daily",
   },
 ];
