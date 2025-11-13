@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaHome, FaUtensils, FaShoppingCart } from "react-icons/fa";
-import Logo from "../Images/logo.png";
+import Logo from "../Images/Logo.png";
 //Used react-icons for clean and customizable icons.
 const Navbar = ({ cartCount }) => {
   const [isOpen, setIsOpen] = useState(false);

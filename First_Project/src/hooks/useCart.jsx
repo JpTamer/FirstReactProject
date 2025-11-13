@@ -39,7 +39,7 @@ export default function useCart() {
 
   // Function to decrement the quantity of a cart item by its id
    const decrementCartItem = (id) => {
-    setCart((prev) => prev.flatMap(i => {
+    setCart((prev) => prev.Map(i => {
       if (i.id === id) {
         if (i.quantity > 1) return { ...i, quantity: i.quantity - 1 };
         else return []; 

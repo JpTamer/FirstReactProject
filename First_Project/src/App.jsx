@@ -4,6 +4,7 @@ import Footer from "./Components/Footer";
 import Home from "./Pages/Home";
 import Menu from "./Pages/Menu";
 import Cart from "./Pages/Cart";
+import OrderProgress from "./Components/OrderProgress";
 import useCart from "./hooks/useCart.jsx";
 import Toast from "./Components/Toast.jsx";
 import ScrollToTop from "./Components/ScrollToTop.jsx";
@@ -44,6 +45,7 @@ function App() {
             />
           }
         />
+        <Route path="/order-progress" element={<OrderProgress />} />
       </Routes>
       <Footer />
     </Router>

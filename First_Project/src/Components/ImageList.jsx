@@ -1,9 +1,9 @@
 import Tiramisu from "../Images/tiramisu.jpg";
 import MargheritaPizza from "../Images/Margherita-pizza.jpg";
-import Arancini from "../Images/arancini.webp";
-import Lasagna from "../Images/lasagna.jpg";
-import Salad from "../Images/salad.jpg";
-import Soup from "../Images/soup.jpg";
+import Arancini from "../Images/Arancini.webp";
+import Lasagna from "../Images/Lasagna.jpg";
+import Salad from "../Images/Salad.jpg";
+import Soup from "../Images/Soup.jpg";
 
 export default function CustomImageList() {
   return (

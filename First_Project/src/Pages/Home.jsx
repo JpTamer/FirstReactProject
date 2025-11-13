@@ -7,8 +7,8 @@ import { Link } from "react-router-dom";
 
 const Home = () => {
 return (
-  <>
-    <div className="bg-[url('./Images/Amalfi-coast.jpg')] bg-cover bg-center relative rounded-2xl mx-4 mt-6">
+  <section className="bg-[#0F1E13] min-h-screen text-[#F5F5F5] pb-10">
+    <div className="bg-[url('./Images/Amalfi.png')] bg-cover bg-center relative rounded-2xl mx-4 pt-6">
       <div className="absolute inset-0 bg-black/40 rounded-2xl"></div>
       <div className="relative z-10 text-center py-100 text-[#F5F5F5]">
         <h1 className="text-4xl font-extrabold text-[#D4AF37] mb-4">
@@ -44,7 +44,7 @@ return (
         Explore Menu →
       </Link>
     </div>
-  </>
+  </section>
 );};
 
 export default Home;

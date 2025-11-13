@@ -1,5 +1,6 @@
 import React from "react";
 import CartItem from "../Components/CartItem";
+import { useNavigate } from "react-router-dom";
 
 
  //Cart component displays the user's shopping cart.
@@ -10,6 +11,7 @@ function Cart({ cart, onAdd, onRemove, onDecrement, onCheckout }) {
     (sum, item) => sum + item.price * item.quantity,
     0
   );
+  const navigate = useNavigate();
 
   return (
     <section className="bg-[#0F1E13] min-h-screen px-4 py-10 text-[#F5F5F5]">
@@ -41,7 +43,11 @@ function Cart({ cart, onAdd, onRemove, onDecrement, onCheckout }) {
           {/* Checkout button triggers the onCheckout handler when clicked */}
           <button
             className="mt-8 block w-full bg-[#D4AF37] hover:bg-yellow-500 text-[#0F1E13] py-3 font-bold text-lg rounded-xl transition"
-            onClick={onCheckout}
+            onClick={() => {
+              const snapshot = { items: cart, total };
+              onCheckout();
+              navigate('/order-progress', { state: snapshot });
+            }}
           >
             Proceed to Checkout
           </button>
