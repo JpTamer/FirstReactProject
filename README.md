@@ -67,3 +67,28 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 ## License
 
 This project is currently unlicensed. Feel free to add a LICENSE file (e.g., MIT) if you want to specify usage terms.
+
+## Screenshots
+
+### Home Page
+![Home Page Screenshot](First_Project/src/Images/home.png)
+
+### Menu View
+![Menu Screenshot](First_Project/src/Images/menu.png)
+
+### Cart View
+![Cart Screenshot](First_Project/src/Images/cart.png)
+
+### Order Progress
+![Order Progress Screenshot](First_Project/src/Images/progress.png)
+
+### Reviews Page
+![Reviews Screenshot](First_Project/src/Images/reviews.png)
+
+### Contact us Page
+![Contact us Screenshot](First_Project/src/Images/contact.png)
+
+### About us Page
+![About us Screenshot](First_Project/src/Images/about.png)
+
+
