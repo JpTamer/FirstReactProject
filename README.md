@@ -1,6 +1,6 @@
 # Amalfi — Italian Restaurant React App
 
-Welcome to Amalfi, a restaurant application built with React and Vite. Amalfi lets customers view a delicious Italian menu, add items to their cart, review and place orders, and track the progress of their order, all in a seamless and modern web interface.
+Welcome to Amalfi, a restaurant application built with React and Vite. Amalfi lets customers view a delicious Italian menu, add items to their cart, review and place orders, and track the progress of orders in real time.
 
 ## Features
 
@@ -28,7 +28,7 @@ npm install
 ### Running Locally (Vite)
 
 ```bash
-pm run dev
+npm run dev
 ```
 
 Then open the URL printed in the terminal, usually [http://localhost:5173](http://localhost:5173).
@@ -45,7 +45,14 @@ Then open the URL printed in the terminal, usually [http://localhost:5173](http:
 - React
 - Vite
 - JavaScript (ES6+)
+- Tailwind CSS — Utility-first CSS framework for rapid UI development
 - (Add any other libraries such as React Router, state management, etc.)
+
+### Tailwind CSS Setup
+
+This project uses [Tailwind CSS](https://tailwindcss.com/) for styling. Tailwind is already installed and configured via `tailwind.config.js` and imported in `src/index.css`. You can customize your design by editing utility classes in your components.
+
+To learn more about customizing Tailwind, visit their [documentation](https://tailwindcss.com/docs/installation).
 
 ## Deployment
 
