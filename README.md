@@ -14,7 +14,6 @@ Welcome to Amalfi, a restaurant application built with React and Vite. Amalfi le
 
 ### Prerequisites
 
-- Node.js (v18+ recommended)
 - npm (v9+ recommended) or yarn
 
 ### Installation
