@@ -45,7 +45,7 @@ Then open the URL printed in the terminal, usually [http://localhost:5173](http:
 - Vite
 - JavaScript (ES6+)
 - Tailwind CSS — Utility-first CSS framework for rapid UI development
-- (Add any other libraries such as React Router, state management, etc.)
+- React Router: For client-side routing and navigation.
 
 ### Tailwind CSS Setup
 
@@ -65,7 +65,7 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 ## License
 
-This project is currently unlicensed. Feel free to add a LICENSE file (e.g., MIT) if you want to specify usage terms.
+This project is currently unlicensed.
 
 ## Screenshots
 
