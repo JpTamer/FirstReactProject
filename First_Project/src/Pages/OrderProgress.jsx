@@ -2,17 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 export default function OrderProgress() {
-  // Define the different steps of the order process
   const steps = ["Placed", "Preparing", "On the way", "Delivered"];
 
   // Get the current location object to access passed state data
   const location = useLocation();
-
-  // Extract items and total price passed from the previous page, or use defaults
+  //?. checks if the value exists before trying to access its properties, so you don’t get an error.
   const items = location.state?.items || [];
   const totalFromCart = location.state?.total || 0;
 
-  // Keep track of the current step in the order process
   const [step, setStep] = useState(0);
 
   // Automatically move to the next step every 5 seconds until the last step
@@ -20,10 +17,8 @@ export default function OrderProgress() {
     // If we're already at the last step, do nothing
     if (step >= steps.length - 1) return;
 
-    // Set a timer to move to the next step after 5 seconds
     const timer = setTimeout(() => setStep(step + 1), 5000);
 
-    // Clear the timer if the step changes
     return () => clearTimeout(timer);
   }, [step, steps.length]);
 
@@ -49,7 +44,6 @@ export default function OrderProgress() {
         <div className="mt-8 flex justify-between">
           {steps.map((label, i) => (
             <div key={i} className="flex flex-col items-center">
-              {/* Circle with step number, highlighted if completed or current */}
               <div
                 className={`w-8 h-8 flex items-center justify-center rounded-full font-bold ${
                   i <= step ? "bg-[#D4AF37] text-[#0F1E13]" : "bg-[#244233]"
@@ -92,13 +86,7 @@ export default function OrderProgress() {
               ))}
               {/* Divider line */}
               <hr className="my-2 border-[#244233]" />
-              {/* Show subtotal */}
-              <div className="flex justify-between text-sm">
-                <span>Subtotal</span>
-                <span>${subtotal.toFixed(2)}</span>
-              </div>
-              
-              {/* Show total price in bold and highlighted color */}
+
               <div className="flex justify-between font-bold text-[#D4AF37] mt-1">
                 <span>Total</span>
                 <span>${total.toFixed(2)}</span>
@@ -110,13 +98,11 @@ export default function OrderProgress() {
         {/* Message shown only when the order is delivered */}
         {step === steps.length - 1 && (
           <div className="mt-5 bg-[#12341F] border border-[#2E5C3D] rounded-lg p-3 text-[#CFF3D1]">
-            Order delivered! 
+            Order delivered!
           </div>
         )}
 
-        {/* Buttons to navigate back home or to rate us after delivery */}
         <div className="mt-6 flex flex-col sm:flex-row justify-center gap-3">
-          {/* Button to go back to the home page */}
           <Link
             to="/"
             className="bg-[#D4AF37] text-[#0F1E13] font-bold px-5 py-2 rounded-lg hover:bg-yellow-500"

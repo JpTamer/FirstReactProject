@@ -4,7 +4,7 @@ import Footer from "./Components/Footer";
 import Home from "./Pages/Home";
 import Menu from "./Pages/Menu";
 import Cart from "./Pages/Cart";
-import OrderProgress from "./Components/OrderProgress";
+import OrderProgress from "./Pages/OrderProgress.jsx";
 import useCart from "./hooks/useCart.jsx";
 import Toast from "./Components/Toast.jsx";
 import ScrollToTop from "./Components/ScrollToTop.jsx";
@@ -26,6 +26,7 @@ function App() {
     <Router>
       <ScrollToTop />
       <Toast message={notification} />
+      {/* it allows you to reduce an entire array into one value. */}
       <Navbar cartCount={cart.reduce((acc, cur) => acc + cur.quantity, 0)} />
       <Routes>
         <Route path="/" element={<Home />} />

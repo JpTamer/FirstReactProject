@@ -157,7 +157,7 @@ export default function Reviews() {
             >
               {/* Display star rating */}
               <div className="flex mb-3">
-                {[...Array(r.rating)].map((_, j) => (
+                {[...Array(r.rating)].map(( j) => (
                   <span key={j} className="text-[#D4AF37] text-lg">
                     ★
                   </span>
