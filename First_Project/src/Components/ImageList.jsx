@@ -39,7 +39,6 @@ const itemData = [
     img: Tiramisu,
     title: "Dolci Selection",
     subtitle: "Indulge in our sweet creations",
-    featured: true,
   },
   {
     img: MargheritaPizza,
@@ -63,7 +62,7 @@ const itemData = [
   },
   {
     img: Soup,
-    title: "Chef’s Soups",
+    title: "Chef's Soups",
     subtitle: "Warm and comforting, crafted daily",
   },
 ];

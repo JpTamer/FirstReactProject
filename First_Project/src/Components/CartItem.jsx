@@ -1,5 +1,3 @@
-import React from "react";
-
 const CartItem = ({ item, onAdd, onDecrement, onRemove }) => {
   const { id, name, price, image, quantity } = item;
 

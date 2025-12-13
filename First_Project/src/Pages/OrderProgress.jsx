@@ -1,35 +1,81 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import axios from "axios";
+import { useAuth } from "../context/AuthContext";
+
+// API base URL from environment variable
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function OrderProgress() {
-  const steps = ["Placed", "Preparing", "On the way", "Delivered"];
+  const { user } = useAuth();
+  const steps = ["pending", "confirmed", "preparing", "ready", "out_for_delivery", "delivered"];
+  const stepLabels = ["Placed", "Confirmed", "Preparing", "Ready", "On the way", "Delivered"];
 
   // Get the current location object to access passed state data
   const location = useLocation();
-  //?. checks if the value exists before trying to access its properties, so you don’t get an error.
-  const items = location.state?.items || [];
-  const totalFromCart = location.state?.total || 0;
+  const orderId = location.state?.orderId;
 
-  const [step, setStep] = useState(0);
+  const [orderData, setOrderData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Automatically move to the next step every 5 seconds until the last step
   useEffect(() => {
-    // If we're already at the last step, do nothing
-    if (step >= steps.length - 1) return;
+    if (orderId) {
+      fetchOrderDetails();
+      
+      // Only poll if order is not delivered
+      const interval = setInterval(() => {
+        if (orderData?.status !== 'delivered') {
+          fetchOrderDetails();
+        }
+      }, 10000);
+      
+      return () => clearInterval(interval);
+    } else {
+      setError('No order ID provided');
+      setLoading(false);
+    }
+  }, [orderId, orderData?.status]);
 
-    const timer = setTimeout(() => setStep(step + 1), 5000);
+  const fetchOrderDetails = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/orders/${orderId}?user_id=${user?.id}`);
+      setOrderData(response.data);
+      setLoading(false);
+      
+      // Stop polling if delivered
+      if (response.data.status === 'delivered') {
+        return;
+      }
+    } catch (err) {
+      console.error('Error fetching order:', err);
+      setError('Failed to load order details');
+      setLoading(false);
+    }
+  };
 
-    return () => clearTimeout(timer);
-  }, [step, steps.length]);
+  if (loading) {
+    return (
+      <section className="min-h-screen bg-[#0F1E13] text-[#F5F5F5] flex items-center justify-center">
+        <div className="text-[#D4AF37] text-xl">Loading order details...</div>
+      </section>
+    );
+  }
 
-  // Calculate the subtotal by adding up the price * quantity for each item
-  const subtotal = items.reduce(
-    (sum, item) => sum + (item.price || 0) * (item.quantity || 1),
-    0
-  );
+  if (error || !orderData) {
+    return (
+      <section className="min-h-screen bg-[#0F1E13] text-[#F5F5F5] flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-500 text-xl mb-4">{error || 'Order not found'}</p>
+          <Link to="/menu" className="text-[#D4AF37] hover:underline">Back to Menu</Link>
+        </div>
+      </section>
+    );
+  }
 
-  // Use the total passed from the cart if available, otherwise use the subtotal
-  const total = totalFromCart > 0 ? totalFromCart : subtotal;
+  const currentStepIndex = steps.indexOf(orderData.status);
+
+
 
   return (
     // Main container for the order progress screen with background and padding
@@ -37,16 +83,23 @@ export default function OrderProgress() {
       <div className="w-full max-w-4xl bg-[#15271E] p-10 rounded-2xl shadow-md text-center">
         <h2 className="text-2xl font-bold text-[#D4AF37]">Order in Progress</h2>
         <p className="text-sm text-[#CFCFCF] mt-2">
-          Thank you! Your order is being prepared.
+          Order #{orderData.id} - Placed on {new Date(orderData.created_at).toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric'
+          })} at {new Date(orderData.created_at).toLocaleTimeString('en-US', { 
+            hour: '2-digit', 
+            minute: '2-digit'
+          })}
         </p>
 
         {/* Progress Steps - shows the order steps with highlighting for completed/current steps */}
-        <div className="mt-8 flex justify-between">
-          {steps.map((label, i) => (
+        <div className="mt-8 flex justify-between overflow-x-auto">
+          {stepLabels.map((label, i) => (
             <div key={i} className="flex flex-col items-center">
               <div
                 className={`w-8 h-8 flex items-center justify-center rounded-full font-bold ${
-                  i <= step ? "bg-[#D4AF37] text-[#0F1E13]" : "bg-[#244233]"
+                  i <= currentStepIndex ? "bg-[#D4AF37] text-[#0F1E13]" : "bg-[#244233]"
                 }`}
               >
                 {i + 1}
@@ -54,7 +107,7 @@ export default function OrderProgress() {
               {/* Label under the circle, colored differently if completed/current */}
               <span
                 className={`mt-1 text-xs ${
-                  i <= step ? "text-[#F5F5F5]" : "text-[#9FB3A9]"
+                  i <= currentStepIndex ? "text-[#F5F5F5]" : "text-[#9FB3A9]"
                 }`}
               >
                 {label}
@@ -65,15 +118,19 @@ export default function OrderProgress() {
 
         <div className="mt-8 bg-[#1A2B21] p-6 rounded-lg border border-[#244233] text-left">
           <h3 className="text-lg font-semibold text-[#D4AF37] mb-3">
-            Your Bill
+            Order #{orderData.id} - Your Bill
           </h3>
+          <p className="text-sm text-[#CFCFCF] mb-3">Status: <span className="text-[#D4AF37] font-semibold">{orderData.status}</span></p>
+          {orderData.delivery_address && (
+            <p className="text-sm text-[#CFCFCF] mb-3">Delivery to: {orderData.delivery_address}</p>
+          )}
           {/* If there are no items, show a message */}
-          {items.length === 0 ? (
+          {!orderData.items || orderData.items.length === 0 ? (
             <p className="text-sm text-[#CFCFCF]">No items in your order.</p>
           ) : (
             <>
               {/* List each item with name, quantity, and price */}
-              {items.map((item) => (
+              {orderData.items.map((item) => (
                 <div
                   key={item.id}
                   className="flex justify-between text-sm mb-2"
@@ -81,7 +138,7 @@ export default function OrderProgress() {
                   <span>
                     {item.name} (x{item.quantity})
                   </span>
-                  <span>${(item.price * item.quantity).toFixed(2)}</span>
+                  <span>${(parseFloat(item.price) * item.quantity).toFixed(2)}</span>
                 </div>
               ))}
               {/* Divider line */}
@@ -89,14 +146,14 @@ export default function OrderProgress() {
 
               <div className="flex justify-between font-bold text-[#D4AF37] mt-1">
                 <span>Total</span>
-                <span>${total.toFixed(2)}</span>
+                <span>${parseFloat(orderData.total_amount).toFixed(2)}</span>
               </div>
             </>
           )}
         </div>
 
         {/* Message shown only when the order is delivered */}
-        {step === steps.length - 1 && (
+        {orderData.status === 'delivered' && (
           <div className="mt-5 bg-[#12341F] border border-[#2E5C3D] rounded-lg p-3 text-[#CFF3D1]">
             Order delivered!
           </div>
@@ -110,7 +167,7 @@ export default function OrderProgress() {
             Back to Home
           </Link>
           {/* Show "Rate Us" button only after the order is delivered */}
-          {step === steps.length - 1 && (
+          {orderData.status === 'delivered' && (
             <Link
               to="/reviews"
               className="bg-[#1F7A4C] text-white font-bold px-5 py-2 rounded-lg hover:bg-[#24935C]"

@@ -1,4 +1,3 @@
-import React from "react";
 //This component provides information about the Amalfi restaurant.
 const AboutUs = () => {
   return (

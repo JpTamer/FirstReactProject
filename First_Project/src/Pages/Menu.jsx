@@ -1,4 +1,10 @@
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import MenuItemCard from "../Components/MenuItemCard";
+
+// API base URL from environment variable
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 import MargheritaPizza from "../Images/Margherita-pizza.jpg";
 import Alfredo from "../Images/fettuccine-alfredo.jpg";
 import Tiramisu from "../Images/tiramisu.jpg";
@@ -12,128 +18,98 @@ import Truffle from "../Images/Truffle.jpg";
 import Pesto from "../Images/Pesto.jpg";
 import Quatro from "../Images/Quatro.webp";
 import Bruschetta from "../Images/Bruschetta.webp";
-const DUMMY_MENU = {
-  Starters: [
-    {
-      id: 1,
-      name: "Soup",
-      description: "Italian vegetable soup",
-      price: 3.49,
-      image: Soup,
-    },
-    {
-      id: 2,
-      name: "Salad",
-      description: "Fresh garden salad mixed with goat cheese",
-      price: 5.49,
-      image: Salad,
-    },
-    {
-      id: 3,
-      name: "Arancini",
-      description: "Risotto balls filled with cheese",
-      price: 4.99,
-      image: Arancini,
-    },
-    {
-      id : 4,
-      name: "Bruschetta",
-      description: "Grilled bread with tomato & basil",
-      price: 2.49,
-      image: Bruschetta,
-    },
-  ],
-  Pizzas: [
-    {
-      id: 5,
-      name: "Margherita Pizza",
-      description: "Classic with mozzarella & basil",
-      price: 8.99,
-      image: MargheritaPizza,
-    },
-    {
-      id: 6,
-      name: "Bresaola Pizza",
-      description: "Air-dried, salted beef with arugula",
-      price: 7.99,
-      image: BresaolaPizza,
-    },
-    {id: 7,
-      name: "Quatro Formaggi Pizza",
-      description: "Mozzarella, gorgonzola, parmesan, ricotta",
-      price: 9.49,
-      image: Quatro,
-    }
-  ],
-  Pastas: [
-    {
-      id: 8,
-      name: "Lasagna",
-      description: "Layers of pasta with meat sauce & béchamel",
-      price: 6.49,
-      image: Lasagna,
-    },
-    {
-      id: 9,
-      name: "Pasta Alfredo",
-      description: "Creamy sauce & parmesan",
-      price: 10.99,
-      image: Alfredo,
-    },
-    {id: 10,
-      name: "Truffle Pasta",
-      description: "Black truffle with creamy sauce",
-      price: 12.49,
-      image: Truffle,
-    },
-    {
-      id: 11,
-      name: "Pesto Pasta",
-      description: "Basil pesto with pine nuts",
-      price: 9.49,
-      image: Pesto,
-    },
-  ],
-  Desserts: [
-    {
-      id: 12,
-      name: "Tiramisu",
-      description: "Italian coffee dessert",
-      price: 6.49,
-      image: Tiramisu,
-    },
-    {
-      id: 13,
-      name: "Pain Perdue",
-      description: "French toast with caramelized sugar",
-      price: 7.49,
-      image: PainPerdue,
-    },
-  ],
+
+// Image mapping for local images
+const IMAGE_MAP = {
+  '/images/Soup.jpg': Soup,
+  '/images/Salad.jpg': Salad,
+  '/images/Arancini.webp': Arancini,
+  '/images/Bruschetta.webp': Bruschetta,
+  '/images/Margherita-pizza.jpg': MargheritaPizza,
+  '/images/BresaolaPizza.webp': BresaolaPizza,
+  '/images/Quatro.webp': Quatro,
+  '/images/Lasagna.jpg': Lasagna,
+  '/images/fettuccine-alfredo.jpg': Alfredo,
+  '/images/Truffle.jpg': Truffle,
+  '/images/Pesto.jpg': Pesto,
+  '/images/tiramisu.jpg': Tiramisu,
+  '/images/PainPerdue-1.jpg': PainPerdue,
 };
 
-const Menu = ({ addToCart }) => (
-  <section className="px-6 py-8 bg-[#0F1E13] min-h-screen">
-    <h2 className="text-3xl font-bold text-center text-[#D4AF37] mb-8">
-      Our Menu
-    </h2>
+const Menu = ({ addToCart }) => {
+  const [menuItems, setMenuItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-    {/* Object.keys(DUMMY_MENU) returns an array of the menu categories */}
-    {Object.keys(DUMMY_MENU).map((category) => (
-      <div key={category} className="mb-12">
-        <h3 className="text-2xl font-semibold text-[#D4AF37] underline mb-2 py-5">
-          {category}
-        </h3>
+  useEffect(() => {
+    fetchMenuItems();
+  }, []);
 
-        {/* Display all items inside this category using .map for looping and key for sorting by key value*/}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {DUMMY_MENU[category].map((item) => (
-            <MenuItemCard key={item.id} item={item} onAddToCart={addToCart} />
-          ))}
-        </div>
-      </div>
-    ))}
-  </section>
-);
+  const fetchMenuItems = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/menu`);
+      // Group items by category
+      const grouped = response.data.reduce((acc, item) => {
+        if (!acc[item.category]) {
+          acc[item.category] = [];
+        }
+        // Map image URLs to local imports
+        const itemWithImage = {
+          ...item,
+          image: IMAGE_MAP[item.image_url] || item.image_url
+        };
+        acc[item.category].push(itemWithImage);
+        return acc;
+      }, {});
+      setMenuItems(grouped);
+      setLoading(false);
+    } catch (err) {
+      console.error('Error fetching menu:', err);
+      setError('Failed to load menu items');
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <section className="px-6 py-8 bg-[#0F1E13] min-h-screen flex items-center justify-center">
+        <div className="text-[#D4AF37] text-xl">Loading menu...</div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="px-6 py-8 bg-[#0F1E13] min-h-screen flex items-center justify-center">
+        <div className="text-red-500 text-xl">{error}</div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="px-6 py-8 bg-[#0F1E13] min-h-screen">
+      <h2 className="text-3xl font-bold text-center text-[#D4AF37] mb-8">
+        Our Menu
+      </h2>
+
+      {/* Display categories from backend in proper order */}
+      {['Starters', 'Pizzas', 'Pastas', 'Desserts'].map((category) => (
+        menuItems[category] && (
+          <div key={category} className="mb-12">
+            <h3 className="text-2xl font-semibold text-[#D4AF37] underline mb-2 py-5">
+              {category}
+            </h3>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {menuItems[category].map((item) => (
+                <MenuItemCard key={item.id} item={item} onAddToCart={addToCart} />
+              ))}
+            </div>
+          </div>
+        )
+      ))}
+    </section>
+  );
+};
 
 export default Menu;
