@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import MenuItemCard from "../Components/MenuItemCard";
 
-// API base URL from environment variable
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 import MargheritaPizza from "../Images/Margherita-pizza.jpg";
@@ -64,7 +63,6 @@ const Menu = ({ addToCart }) => {
       setMenuItems(grouped);
       setLoading(false);
     } catch (err) {
-      console.error('Error fetching menu:', err);
       setError('Failed to load menu items');
       setLoading(false);
     }

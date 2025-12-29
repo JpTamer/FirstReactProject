@@ -3,21 +3,18 @@ import CartItem from "../Components/CartItem";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-
- //Cart component displays the user's shopping cart.
- 
 function Cart({ cart, onAdd, onRemove, onDecrement, onCheckout }) {
   const { user } = useAuth();
   const navigate = useNavigate();
   
   const [showCheckoutForm, setShowCheckoutForm] = useState(false);
+  const [isProcessingOrder, setIsProcessingOrder] = useState(false);
   const [deliveryInfo, setDeliveryInfo] = useState({
     delivery_address: user?.address || '',
     phone: user?.phone || '',
     notes: ''
   });
 
-  // Calculate the total price of all items in the cart by summing up (price * quantity) for each item
   const total = cart.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
@@ -33,9 +30,14 @@ function Cart({ cart, onAdd, onRemove, onDecrement, onCheckout }) {
 
   const handleSubmitOrder = async (e) => {
     e.preventDefault();
-    const result = await onCheckout(deliveryInfo);
-    if (result.success) {
-      navigate('/order-progress', { state: { orderId: result.orderId } });
+    setIsProcessingOrder(true);
+    try {
+      const result = await onCheckout(deliveryInfo);
+      if (result.success) {
+        navigate('/order-progress', { state: { orderId: result.orderId } });
+      }
+    } finally {
+      setIsProcessingOrder(false);
     }
   };
 
@@ -43,7 +45,6 @@ function Cart({ cart, onAdd, onRemove, onDecrement, onCheckout }) {
     <section className="bg-[#0F1E13] min-h-screen px-4 py-10 text-[#F5F5F5]">
       <h2 className="text-3xl font-bold text-[#D4AF37] mb-4 text-center">Your Cart</h2>
       
-      {/*show message if cart is empty, else display cart items */}
       {cart.length === 0 ? (
         <div className="text-center text-[#CFCFCF] text-xl py-12">
           Your cart is empty. Go add something delicious!
@@ -60,7 +61,6 @@ function Cart({ cart, onAdd, onRemove, onDecrement, onCheckout }) {
             />
           ))}
           
-          {/* Display the total price section with styling */}
           <div className="flex justify-between items-center border-t border-[#D4AF37] pt-5 mt-5">
             <span className="text-lg font-semibold text-[#D4AF37]">Total:</span>
             <span className="text-2xl font-bold">${total.toFixed(2)}</span>
@@ -119,14 +119,16 @@ function Cart({ cart, onAdd, onRemove, onDecrement, onCheckout }) {
                   type="button"
                   onClick={() => setShowCheckoutForm(false)}
                   className="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 font-bold rounded-xl transition"
+                  disabled={isProcessingOrder}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 bg-[#D4AF37] hover:bg-yellow-500 text-[#0F1E13] py-3 font-bold rounded-xl transition"
+                  className="flex-1 bg-[#D4AF37] hover:bg-yellow-500 text-[#0F1E13] py-3 font-bold rounded-xl transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={isProcessingOrder}
                 >
-                  Place Order
+                  {isProcessingOrder ? 'Processing Order...' : 'Place Order'}
                 </button>
               </div>
             </form>

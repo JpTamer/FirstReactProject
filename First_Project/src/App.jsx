@@ -55,10 +55,8 @@ function AppContent() {
     <Router>
       <ScrollToTop />
       <Toast message={notification} />
-      {/* it allows you to reduce an entire array into one value. */}
       <Navbar cartCount={cart.reduce((acc, cur) => acc + cur.quantity, 0)} />
       
-      {/* Floating Cart Button - Mobile Only on Menu Page */}
       <FloatingCartButton cart={cart} />
 
       <Routes>

@@ -1,8 +1,8 @@
+/* eslint-disable no-undef */
 import express from 'express';
 import pg from 'pg';
 import cors from 'cors';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
 // Load environment variables
@@ -13,9 +13,6 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-
-// JWT Secret from environment variable
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-this-in-production';
 
 // Database connection from environment variable
 const pool = new Pool({
@@ -144,7 +141,6 @@ app.post("/login", async (req, res) => {
     }
 });
 
-// ==================== MENU ENDPOINTS ======================================
 
 // Get all menu items
 app.get("/menu", async (req, res) => {
@@ -168,7 +164,6 @@ app.get("/menu", async (req, res) => {
     }
 });
 
-// ==================== CART ENDPOINTS ====================
 
 // Add item to cart
 app.post("/cart", async (req, res) => {
@@ -272,7 +267,6 @@ app.delete("/cart/clear/all", async (req, res) => {
     }
 });
 
-// ==================== ORDERS ENDPOINTS ====================
 
 // Create order (checkout)
 app.post("/orders", async (req, res) => {
@@ -419,7 +413,6 @@ app.put("/orders/:id/status", async (req, res) => {
     }
 });
 
-// ==================== REVIEWS ENDPOINTS ====================
 
 // Add review
 app.post("/reviews", async (req, res) => {

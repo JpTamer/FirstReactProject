@@ -3,7 +3,6 @@ import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 
-// API base URL from environment variable
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function OrderProgress() {
@@ -11,7 +10,6 @@ export default function OrderProgress() {
   const steps = ["pending", "confirmed", "preparing", "ready", "out_for_delivery", "delivered"];
   const stepLabels = ["Placed", "Confirmed", "Preparing", "Ready", "On the way", "Delivered"];
 
-  // Get the current location object to access passed state data
   const location = useLocation();
   const orderId = location.state?.orderId;
 
@@ -23,7 +21,6 @@ export default function OrderProgress() {
     if (orderId) {
       fetchOrderDetails();
       
-      // Only poll if order is not delivered
       const interval = setInterval(() => {
         if (orderData?.status !== 'delivered') {
           fetchOrderDetails();
@@ -43,12 +40,10 @@ export default function OrderProgress() {
       setOrderData(response.data);
       setLoading(false);
       
-      // Stop polling if delivered
       if (response.data.status === 'delivered') {
         return;
       }
     } catch (err) {
-      console.error('Error fetching order:', err);
       setError('Failed to load order details');
       setLoading(false);
     }
@@ -78,7 +73,6 @@ export default function OrderProgress() {
 
 
   return (
-    // Main container for the order progress screen with background and padding
     <section className="min-h-screen bg-[#0F1E13] text-[#F5F5F5] flex items-center justify-center px-8 py-20">
       <div className="w-full max-w-4xl bg-[#15271E] p-10 rounded-2xl shadow-md text-center">
         <h2 className="text-2xl font-bold text-[#D4AF37]">Order in Progress</h2>
@@ -93,20 +87,18 @@ export default function OrderProgress() {
           })}
         </p>
 
-        {/* Progress Steps - shows the order steps with highlighting for completed/current steps */}
-        <div className="mt-8 flex justify-between overflow-x-auto">
+        <div className="mt-8 flex justify-between overflow-x-auto gap-4 md:gap-0">
           {stepLabels.map((label, i) => (
-            <div key={i} className="flex flex-col items-center">
+            <div key={i} className="flex flex-col items-center min-w-[60px] md:min-w-0">
               <div
-                className={`w-8 h-8 flex items-center justify-center rounded-full font-bold ${
+                className={`w-10 h-10 md:w-8 md:h-8 flex items-center justify-center rounded-full font-bold ${
                   i <= currentStepIndex ? "bg-[#D4AF37] text-[#0F1E13]" : "bg-[#244233]"
                 }`}
               >
                 {i + 1}
               </div>
-              {/* Label under the circle, colored differently if completed/current */}
               <span
-                className={`mt-1 text-xs ${
+                className={`mt-2 text-xs ${
                   i <= currentStepIndex ? "text-[#F5F5F5]" : "text-[#9FB3A9]"
                 }`}
               >
@@ -124,12 +116,10 @@ export default function OrderProgress() {
           {orderData.delivery_address && (
             <p className="text-sm text-[#CFCFCF] mb-3">Delivery to: {orderData.delivery_address}</p>
           )}
-          {/* If there are no items, show a message */}
           {!orderData.items || orderData.items.length === 0 ? (
             <p className="text-sm text-[#CFCFCF]">No items in your order.</p>
           ) : (
             <>
-              {/* List each item with name, quantity, and price */}
               {orderData.items.map((item) => (
                 <div
                   key={item.id}

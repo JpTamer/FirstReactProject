@@ -65,7 +65,6 @@ const ContactInfo = () => {
                 <a
                   href="https://www.instagram.com/amalfi.lb?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
                   target="_blank"
-                  /* When going to a _blank link, use rel="noopener noreferrer" for security reasons to hide where the link is coming from */
                   rel="noopener noreferrer"
                   className="text-[#F5F5F5] hover:underline"
                 >
